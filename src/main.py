@@ -1,5 +1,5 @@
 def main():
-    print("GTM and Automation initial code")
+    print("Automation initial code")
 
 
 if __name__ == "__main__":
