@@ -1,4 +1,5 @@
 from news_service import get_news, extract_articles
+from sentiment_service import sentiment_analysis, extract_positive_scores, obtain_best_article
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -13,6 +14,15 @@ def main():
         return
     articles,text = extract_articles(data)
     logger.info("Retrieved %s articles",len(articles))
+    rating_list = sentiment_analysis(text)
+    positive_scores = extract_positive_scores(rating_list)
+    best_index = obtain_best_article(positive_scores)
+    if best_index is not None:
+        best_article = articles[best_index]
+        logger.info("Best article index: %s", best_index)
+        print(best_article)
+    logger.info("Rating List: %s",rating_list)
+    logger.info("Positive Scores: %s",positive_scores)
 
 if __name__ == "__main__":
     main()
