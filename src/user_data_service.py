@@ -12,5 +12,6 @@ def get_user_data(user_id):
         raise ValueError(f'User {user_id} was not found')
     return {
         "email": user["email"].iloc[0],
-        "category": user["categoria_favorita"].iloc[0]
+        "category": user["categoria_favorita"].iloc[0],
+        "name": user["nombre"].iloc[0]
     }
