@@ -1,6 +1,7 @@
 from news_service import get_news, extract_articles
 from sentiment_service import sentiment_analysis, extract_positive_scores, obtain_best_article
 from user_data_service import get_user_data
+from email_service import send_mail
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -11,7 +12,9 @@ def main():
     user_id = input("Please insert the user_id you would like to send positive news: ")
     try:
         user_dictionary = get_user_data(user_id)
+        user_email = user_dictionary["email"]
         favorite_category = user_dictionary["category"]
+        user_name = user_dictionary["name"]
     except ValueError as e:
         logger.error("Error: %s",e)
         return
@@ -27,9 +30,20 @@ def main():
     if best_index is not None:
         best_article = articles[best_index]
         logger.info("Best article index: %s", best_index)
-        print(best_article)
-    logger.info("Rating List: %s",rating_list)
-    logger.info("Positive Scores: %s",positive_scores)
+        logger.debug("Rating List: %s",rating_list)
+        logger.debug("Positive Scores: %s",positive_scores)
+        subject = f"Good News for you in {favorite_category}, {user_name}!"
+        send_mail(
+            address=user_email,
+            subject=subject,
+            body = (
+                f"Hi {user_name}! Here is some good news that might interest you:\n\n"
+                f"{best_article['title']}\n\n"
+                f"Read full article: {best_article['url']}")
+        )
+    else:
+        logger.warning("Could not find a sufficiently positive article within the list")
+        return
 
 if __name__ == "__main__":
     main()
