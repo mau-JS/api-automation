@@ -24,10 +24,3 @@ def send_mail(address,subject,body):
         smtp.login(sender, password)
         smtp.send_message(message)
     logger.info("Email sent successfully to %s", address)
-
-if __name__=="__main__":
-        send_mail(
-        address="iconoclastsym@gmail.com",
-        subject="Test email",
-        body="This is a test email from my Python project."
-    )

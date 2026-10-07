@@ -1,6 +1,6 @@
-from news_service import get_news, extract_articles
+from news_client import get_news, extract_articles
 from sentiment_service import sentiment_analysis, extract_positive_scores, obtain_best_article
-from user_data_service import get_user_data
+from user_repository import get_user_data
 from email_service import send_mail
 import logging
 
@@ -33,14 +33,17 @@ def main():
         logger.debug("Rating List: %s",rating_list)
         logger.debug("Positive Scores: %s",positive_scores)
         subject = f"Good News for you in {favorite_category}, {user_name}!"
-        send_mail(
-            address=user_email,
-            subject=subject,
-            body = (
-                f"Hi {user_name}! Here is some good news that might interest you:\n\n"
-                f"{best_article['title']}\n\n"
-                f"Read full article: {best_article['url']}")
-        )
+        try:
+            send_mail(
+                address=user_email,
+                subject=subject,
+                body = (
+                    f"Hi {user_name}! Here is some good news that might interest you:\n\n"
+                    f"{best_article['title']}\n\n"
+                    f"Read full article: {best_article['url']}")
+            )
+        except Exception as e:
+            logger.error("Failed to send email: %s", e)
     else:
         logger.warning("Could not find a sufficiently positive article within the list")
         return
