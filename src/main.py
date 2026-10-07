@@ -30,8 +30,8 @@ def main():
     if best_index is not None:
         best_article = articles[best_index]
         logger.info("Best article index: %s", best_index)
-        logger.debug("Rating List: %s",rating_list)
-        logger.debug("Positive Scores: %s",positive_scores)
+        logger.info("Rating List: %s",rating_list)
+        logger.info("Positive Scores: %s",positive_scores)
         subject = f"Good News for you in {favorite_category}, {user_name}!"
         try:
             send_mail(
